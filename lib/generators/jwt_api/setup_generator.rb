@@ -8,10 +8,14 @@ module JwtApi
       [__dir__]
     end
 
+    def copy_api_controllers
+      directory 'templates/api', 'app/controllers/api'
+    end
+
     def add_api_namespace_to_routes
       routes = 'config/routes.rb'
-
       inject_into_file routes, after: 'Rails.application.routes.draw do' do
+        # TODO: this is ugly, there has to be a better way to do this
         "\n\n# API routes
 namespace :api, defaults: { format: :json } do
   namespace :v1 do
@@ -23,14 +27,11 @@ namespace :api, defaults: { format: :json } do
     get 'me' => 'users#me'
     # User Password Reset Flow
     post 'users/reset_password' => 'passwords#reset_password_instructions'
+    get 'passwords/verify' => 'passwords#verify'
     post 'users/update_password' => 'passwords#update_password'
   end
 end\n\n"
       end
-    end
-
-    def copy_api_routes
-      directory 'templates/api', 'app/controllers/api'
     end
 
     def copy_user_views
@@ -45,28 +46,16 @@ end\n\n"
       directory 'templates/views/jwt_mailer', 'app/views/jwt_mailer'
     end
 
-    def generate_jti_migration
-      migration_template 'migrations/jti_migration.rb', 'db/migrate/create_jti.rb'
+    def copy_jwt_class
+      copy_file 'templates/initializers/json_web_token.rb', 'config/initializers/json_web_token.rb'
     end
 
-    # def copy_initializer
-    #   template 'jwt_api.rb', 'config/initializers/jwt_api.rb'
-    # end
+    def generate_jti_migration
+      generate 'migration', 'add_jti_to_users', 'jti:string:uniq:index'
+    end
 
-    # def copy_routes
-    #   template 'jwt_api_routes.rb', 'config/routes.rb'
-    # end
-
-    # def copy_controllers
-    #   template 'jwt_api_controller.rb', 'app/controllers/jwt_api_controller.rb'
-    # end
-
-    # def copy_spec
-    #   template 'jwt_api_spec.rb', 'spec/models/jwt_api_model_spec.rb'
-    # end
-
-    # def copy_test
-    #   template 'jwt_api_test.rb', 'test/models/jwt_api_model_test.rb'
-    # end
+    def run_migration
+      rake 'db:migrate'
+    end
   end
 end
