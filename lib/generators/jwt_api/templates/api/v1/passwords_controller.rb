@@ -2,18 +2,41 @@
 
 # User controller
 class Api::V1::PasswordsController < Api::BaseController
-  skip_before_action :authenticate_request!, only: %i[reset_password_instructions]
+  skip_before_action :authenticate_request!, only: %i[reset_password_instructions verify]
 
   def reset_password_instructions
     user = User.find_by(email: password_params[:email])
-    if user.not_nil?
+    if user.nil?
+      render json: { message: 'email not found' }, status: :not_found
+    else
       user.reset_password_token = SecureRandom.uuid
       user.reset_password_sent_at = Time.now
       user.save
       JwtMailer.reset_password(user.id, user.reset_password_token).deliver
       render json: { message: 'reset password instructions sent' }, status: :ok
+    end
+  end
+
+  def verify
+    user = User.find_by(reset_password_token: password_params[:reset_password_token])
+    if user.nil?
+      render json: { message: 'reset password token not found' }, status: :not_found
+    elsif user.reset_password_sent_at > 1.hour.ago
+      render json: { message: 'reset password token has expired' }, status: :not_found
     else
-      render json: { message: 'email not found' }, status: :not_found
+      user.reset_password_token = nil
+      user.reset_password_sent_at = nil
+      user.save
+
+      iat = Time.now.to_i
+      exp = Time.now.to_i + 10 * 60
+
+      render json: {
+        token: JsonWebToken.encode({ user_id: user.id,
+                                     jti: user.jti,
+                                     iat: iat,
+                                     exp: exp })
+      }, status: :ok
     end
   end
 
@@ -40,21 +63,15 @@ class Api::V1::PasswordsController < Api::BaseController
   rescue JWT::VerificationError, JWT::DecodeError
     render json: { errors: ['Unauthorized'] }, status: :unauthorized
 
-    return false unless @current_user.not_nil?
+    return false if @current_user.nil?
 
     true
-  end
-
-  def password_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :reset_password_token)
   end
 
   def passwords_match?(password, password_confirmation)
-    return false if password.not_nil? && password != password_confirmation
+    return false if !password.nil? && password != password_confirmation
 
     true
-    # render json: { message: "passwords don't match" },
-    #        status: :unprocessable_entity
   end
 
   def password_update(passwd)
@@ -64,5 +81,9 @@ class Api::V1::PasswordsController < Api::BaseController
     else
       render json: @current_user.errors, status: :unprocessable_entity
     end
+  end
+
+  def password_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :reset_password_token)
   end
 end

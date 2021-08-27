@@ -2,7 +2,7 @@
 
 # User controller
 class Api::V1::UsersController < Api::BaseController
-  skip_before_action :authenticate_request!, only: %i[create reset_password_instructions]
+  skip_before_action :authenticate_request!, only: %i[create]
   def create
     unless user_params[:password] == user_params[:password_confirmation]
       return render json: { message: "passwords don't match" }, status: :unprocessable_entity
@@ -23,7 +23,7 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def update
-    if user_params[:password].not_nil? && user_params[:password] != user_params[:password_confirmation]
+    if !user_params[:password].nil? && user_params[:password] != user_params[:password_confirmation]
       return render json: { message: "passwords don't match" }, status: :unprocessable_entity
     end
 
@@ -39,7 +39,7 @@ class Api::V1::UsersController < Api::BaseController
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name,
+    params.require(:user).permit(:email, :password, :password_confirmation,
                                  :reset_password_token)
   end
 end
