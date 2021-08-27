@@ -1,8 +1,6 @@
 # JwtApi
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jwt_api`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Generate user, session, and password api routes with JWT authentication.
 
 ## Installation
 
@@ -20,12 +18,55 @@ Or install it yourself as:
 
     $ gem install jwt_api
 
+Generate your API:
+
+    $ rails g jwt_api:setup
+
+```
+Running via Spring preloader in process 56238
+      create  app/controllers/api
+      create  app/controllers/api/base_controller.rb
+      create  app/controllers/api/v1/authentication_controller.rb
+      create  app/controllers/api/v1/passwords_controller.rb
+      create  app/controllers/api/v1/users_controller.rb
+      insert  config/routes.rb
+      create  app/views/users
+      create  app/views/users/_user.html.erb
+      create  app/views/users/_user.json.jbuilder
+      create  app/mailers/jwt_mailer.rb
+      create  app/views/jwt_mailer
+      create  app/views/jwt_mailer/reset_password.html.erb
+      create  config/initializers/json_web_token.rb
+    generate  migration
+       rails  generate migration add_jti_to_users jti:string:uniq:index
+Running via Spring preloader in process 56250
+      invoke  active_record
+      create    db/migrate/20210827123255_add_jti_to_users.rb
+        rake  db:migrate
+== 20210827123255 AddJtiToUsers: migrating ====================================
+-- add_column(:users, :jti, :string)
+   -> 0.0061s
+-- add_index(:users, :jti, {:unique=>true})
+   -> 0.0196s
+== 20210827123255 AddJtiToUsers: migrated (0.0259s) ===========================
+```
+
+Feel free to remove the gem from your Gemfile, you now have everything you need in your application.
 ## Usage
 
-TODO: Write usage instructions here
+1. Make sure that each user that needs access to the API has a JTI generated.
+   1. `User.first.jti = SecureRandom.uuid`
+2. Request a JWT at the `/api/authenticate/` endpoint.
+3. Include that token as a `Bearer` token in all other requests.
 
-rails g jwt_api:setup
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ca8f0a9bf593ceeb9df0?action=collection%2Fimport)
+
+
+[Docs](https://documenter.getpostman.com/view/6130650/TzzHjXVv)
+
+## Limitations
+- Currently this will only work with a devise User model.
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -34,7 +75,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jwt_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/jwt_api/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/leopolicastro/jwt_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/jwt_api/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
