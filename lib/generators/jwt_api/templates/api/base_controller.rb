@@ -33,7 +33,7 @@ class Api::BaseController < ApplicationController
 
   def jti_matches?
     @current_user = User.find(auth_token[:user_id])
-    @current_user.jti.not_nil? && @current_user.jti == auth_token[:jti]
+    !@current_user.jti.nil? && @current_user.jti == auth_token[:jti]
   end
 
   def user_id_in_token?
@@ -41,7 +41,7 @@ class Api::BaseController < ApplicationController
   end
 
   # TODO: refactor this into user_id_in_token?
-  def user_reset_token_in_token?
-    http_token && auth_token && auth_token[:reset_password_token] && jti_matches?
+  def user_reset_token_in_params?
+    params[:reset_password_token]
   end
 end
