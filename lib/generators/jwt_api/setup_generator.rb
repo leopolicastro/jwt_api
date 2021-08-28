@@ -26,9 +26,9 @@ namespace :api, defaults: { format: :json } do
     resource :users
     get 'me' => 'users#me'
     # User Password Reset Flow
-    post 'users/reset_password' => 'passwords#reset_password_instructions'
+    post 'passwords/reset' => 'passwords#reset_password_instructions'
     get 'passwords/verify' => 'passwords#verify'
-    post 'users/update_password' => 'passwords#update_password'
+    post 'passwords/update' => 'passwords#update_password'
   end
 end\n\n"
       end
