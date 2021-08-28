@@ -7,7 +7,6 @@ class Api::V1::PasswordsController < Api::BaseController
   # Password Reset Flow
   # 1. User requests password reset instructions by sending params with email
   # to /api/v1/passwords/reset
-
   def reset_password_instructions
     @user = User.find_by(email: password_params[:email])
     if @user.nil?
@@ -79,7 +78,7 @@ class Api::V1::PasswordsController < Api::BaseController
 
   def password_update(password)
     if @user.update(password: password, jti: SecureRandom.uuid)
-      render json: { message: 'password updated' }, status: :ok
+      render json: { message: 'password updated, please reauthenticate' }, status: :ok
     else
       render json: @user.errors, status: :unprocessable_entity
     end

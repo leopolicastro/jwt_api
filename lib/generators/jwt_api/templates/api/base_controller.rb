@@ -40,7 +40,6 @@ class Api::BaseController < ApplicationController
     http_token && auth_token && auth_token[:user_id].to_i && jti_matches?
   end
 
-  # TODO: refactor this into user_id_in_token?
   def user_reset_token_in_params?
     params[:reset_password_token]
   end
