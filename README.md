@@ -60,7 +60,7 @@ Feel free to remove the gem from your Gemfile, you now have everything you need 
 3. Include that token as a `Bearer` token in all other requests.
 
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ca8f0a9bf593ceeb9df0?action=collection%2Fimport)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6130650-059cc2e3-88f7-48a8-95d0-d7dca1d7caef?action=collection%2Ffork&collection-url=entityId%3D6130650-059cc2e3-88f7-48a8-95d0-d7dca1d7caef%26entityType%3Dcollection%26workspaceId%3D128e0ba1-898b-40bb-8006-a329fb1c28de)
 
 
 [Docs](https://documenter.getpostman.com/view/6130650/TzzHjXVv)
