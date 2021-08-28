@@ -23,10 +23,6 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def update
-    if !user_params[:password].nil? && user_params[:password] != user_params[:password_confirmation]
-      return render json: { message: "passwords don't match" }, status: :unprocessable_entity
-    end
-
     @current_user.update(user_params.except(:password_confirmation, :reset_password_token))
     render partial: 'users/user', locals: { user: @current_user }
   end
@@ -39,7 +35,7 @@ class Api::V1::UsersController < Api::BaseController
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation,
-                                 :reset_password_token)
+    params.require(:user).permit(:email, :password,
+                                 :password_confirmation)
   end
 end
