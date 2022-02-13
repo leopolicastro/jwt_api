@@ -2,7 +2,7 @@
 
 # JSON Web Token class
 class JsonWebToken
-  def initialize(key = Rails.application.credentials[:secret_key_base], algorithm = 'HS256')
+  def initialize(key = Rails.application.credentials[:jwt_secret], algorithm = 'HS256')
     @key = key
     @algorithm = algorithm
   end

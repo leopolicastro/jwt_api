@@ -56,8 +56,17 @@ Running via Spring preloader in process 56250
 
 1. Make sure that each user that needs access to the API has a JTI generated.
    1. `User.first.jti = SecureRandom.uuid`
-2. Request a JWT at the `/api/authenticate/` endpoint.
-3. Include that token as a `Bearer` token in all other requests.
+2. From your Rails console run `SecureRandom.hex(64)` and make note of the output.
+   - Sample output:
+      ```text
+      "0086870fb04cafbaa15b110cf78352fbca75537cc90e06892e206e07c24caa33ff5f6aadf2649cafac08c4acf6a1b7527b97bfa943481c282ba2480a0a922657"
+      ```
+3. Run `rails credentials:edit --environment=development` (and production, staging when applicable) and set your `jwt_secret` environment variable.
+   ```yml
+      jwt_secret: 0086870fb04cafbaa15b110cf78352fbca75537cc90e06892e206e07c24caa33ff5f6aadf2649cafac08c4acf6a1b7527b97bfa943481c282ba2480a0a922657
+   ```
+3. Request a JWT at the `/api/authenticate/` endpoint.
+4. Include that token as a `Bearer` token in all other requests.
 
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6130650-059cc2e3-88f7-48a8-95d0-d7dca1d7caef?action=collection%2Ffork&collection-url=entityId%3D6130650-059cc2e3-88f7-48a8-95d0-d7dca1d7caef%26entityType%3Dcollection%26workspaceId%3D128e0ba1-898b-40bb-8006-a329fb1c28de)
