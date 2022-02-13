@@ -11,15 +11,14 @@ class Api::V1::PasswordsController < Api::BaseController
     @user = User.find_by(email: password_params[:email])
     if @user.nil?
       render json: { message: 'email not found' }, status: :not_found
+    elsif @user.update(
+      reset_password_token: SecureRandom.uuid,
+      reset_password_sent_at: Time.now
+    )
+      JwtMailer.reset_password(@user.id, @user.reset_password_token).deliver
+      render json: { message: 'reset password instructions sent' }, status: :ok
     else
-      @user.reset_password_token = SecureRandom.uuid
-      @user.reset_password_sent_at = Time.now
-      if @user.save
-        JwtMailer.reset_password(@user.id, @user.reset_password_token).deliver
-        render json: { message: 'reset password instructions sent' }, status: :ok
-      else
-        render json: { message: @user.errors }, status: :not_found
-      end
+      render json: { message: @user.errors }, status: :not_found
     end
   end
 
@@ -27,25 +26,22 @@ class Api::V1::PasswordsController < Api::BaseController
   # with a token in the params, if a succesful response is received, the client can
   # store the newly issued JWT and redirect the user to the password reset form
   def verify
-    @user = User.where(reset_password_token: params[:token]).first
+    @user = User.find_by(reset_password_token: params[:token])
     if @user.nil?
       render json: { message: 'reset password token not found' }, status: :not_found
-    elsif @user.reset_password_sent_at < 1.hour.ago
+    elsif @user.reset_password_sent_at < 10.minutes.ago
       render json: { message: 'reset password token has expired' }, status: :not_found
     else
-      @user.reset_password_token = nil
-      @user.reset_password_sent_at = nil
-      @user.jti = SecureRandom.uuid
-      @user.save
-
-      iat = Time.now.to_i
-      exp = Time.now.to_i + 10 * 60
-
+      @user.update!(
+        reset_password_token: nil,
+        reset_password_sent_at: nil,
+        jti: SecureRandom.uuid
+      )
       render json: {
         token: JsonWebToken.encode({ user_id: @user.id,
                                      jti: @user.jti,
-                                     iat: iat,
-                                     exp: exp })
+                                     iat: Time.now.to_i,
+                                     exp: Time.now.to_i + 10 * 60 })
       }, status: :ok
     end
   end

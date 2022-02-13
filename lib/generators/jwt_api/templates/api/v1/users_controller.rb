@@ -3,6 +3,7 @@
 # User controller
 class Api::V1::UsersController < Api::BaseController
   skip_before_action :authenticate_request!, only: %i[create]
+
   def create
     unless user_params[:password] == user_params[:password_confirmation]
       return render json: { message: "passwords don't match" }, status: :unprocessable_entity

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jwt_api (0.1.0)
+    jwt_api (0.1.1)
       jwt (~> 2.2, >= 2.2.3)
 
 GEM
@@ -25,13 +25,14 @@ GEM
     rspec-support (3.10.2)
 
 PLATFORMS
+  arm64-darwin-21
   x86_64-darwin-20
 
 DEPENDENCIES
   jwt (~> 2.2, >= 2.2.3)
   jwt_api!
   rake (~> 13.0)
-  rspec (~> 3.0)
+  rspec
 
 BUNDLED WITH
    2.2.25

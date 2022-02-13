@@ -29,11 +29,12 @@ class Api::V1::AuthenticationController < Api::BaseController
 
     iat = Time.now.to_i
     exp = Time.now.to_i + 24 * 3600
+
     {
-      token: JsonWebToken.encode({ user_id: user.id,
-                                   jti: user.jti,
-                                   iat: iat,
-                                   exp: exp })
+      token: jwt.encode({ user_id: user.id,
+                          jti: user.jti,
+                          iat: iat,
+                          exp: exp })
     }
   end
 end
