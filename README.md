@@ -51,7 +51,7 @@ Running via Spring preloader in process 56250
 == 20210827123255 AddJtiToUsers: migrated (0.0259s) ===========================
 ```
 
-Feel free to remove the gem from your Gemfile, you now have everything you need in your application.
+
 ## Usage
 
 1. Make sure that each user that needs access to the API has a JTI generated.
