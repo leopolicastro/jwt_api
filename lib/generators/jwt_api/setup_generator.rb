@@ -53,9 +53,5 @@ end\n\n"
     def generate_jti_migration
       generate 'migration', 'add_jti_to_users', 'jti:string:uniq:index'
     end
-
-    def run_migration
-      rake 'db:migrate'
-    end
   end
 end
