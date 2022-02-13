@@ -1,6 +1,6 @@
 # JwtApi
 
-Generate user, session, and password api routes with JWT authentication.
+Scaffold a JSON Web Token API.
 
 ## Installation
 

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Leo Policastro']
   spec.email         = ['lpolicastro@pm.me']
 
-  spec.summary       = 'Write a short summary, because RubyGems requires one.'
-  spec.description   = 'Write a longer description or delete this line.'
+  spec.summary       = 'Scaffold a JSON Web Token API'
+  spec.description   = 'Scaffold a JSON Web Token API'
   spec.homepage      = 'https://github.com/leopolicastro/jwt_api/'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.4.0'
