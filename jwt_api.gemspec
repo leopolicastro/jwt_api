@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['lpolicastro@pm.me']
 
   spec.summary       = 'Scaffold a JSON Web Token API'
-  spec.description   = 'Scaffold a JSON Web Token API'
+  spec.description   = 'Scaffold a JSON Web Token API.'
   spec.homepage      = 'https://github.com/leopolicastro/jwt_api/'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.4.0'
