@@ -51,6 +51,7 @@ Running via Spring preloader in process 56250
 == 20210827123255 AddJtiToUsers: migrated (0.0259s) ===========================
 ```
 
+    $ rails db:migrate
 
 ## Usage
 
