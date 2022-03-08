@@ -15,7 +15,6 @@ module JwtApi
     def add_api_namespace_to_routes
       routes = 'config/routes.rb'
       inject_into_file routes, after: 'Rails.application.routes.draw do' do
-        # TODO: this is ugly, there has to be a better way to do this
         "\n\n# API routes
 namespace :api, defaults: { format: :json } do
   namespace :v1 do
